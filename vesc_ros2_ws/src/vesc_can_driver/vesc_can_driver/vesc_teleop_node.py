@@ -2,15 +2,16 @@
 """
 Teleop-нода для VESC: управление мотором с клавиатуры (WASD).
 
-Публикует duty в топик команды (по умолчанию /vesc_can_node/cmd/duty),
-повторяя его с заданной частотой, чтобы не сработал watchdog основной ноды.
+Публикует geometry_msgs/Twist в /cmd_vel:
+    linear.x  — линейная скорость [-1.0 .. 1.0] (нормированная)
+    angular.z — угловая скорость  [-1.0 .. 1.0] (нормированная)
 
 Клавиши:
-    W — вперёд (duty = +max)
-    S — назад  (duty = -max)
-    A — медленнее (max_duty -= шаг)
-    D — быстрее   (max_duty += шаг)
-    Пробел — стоп (duty = 0)
+    W — вперёд (linear.x += шаг)
+    S — назад  (linear.x -= шаг)
+    A — влево  (angular.z += шаг)
+    D — вправо (angular.z -= шаг)
+    Пробел — стоп
     Q / Esc — выход
 
 Графики телеметрии — опционально, ВЫКЛЮЧЕНЫ по умолчанию (параметр enable_plot).
@@ -24,6 +25,7 @@ import threading
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64
+from geometry_msgs.msg import Twist
 
 # кроссплатформенное чтение клавиш
 try:
@@ -35,15 +37,6 @@ except ImportError:
     import msvcrt
     _POSIX = False
 
-
-HELP = """
-=== VESC teleop (WASD) ===
-  W — вперёд     S — назад
-  A — медленнее  D — быстрее
-  Пробел — стоп
-  Q / Esc — выход
-"""
-
 def _open_tty():
     """Открыть /dev/tty, чтобы читать клавиши даже если stdin перенаправлен."""
     try:
@@ -51,25 +44,37 @@ def _open_tty():
     except Exception:
         return sys.stdin
 
+
+HELP = """
+=== VESC teleop (WASD) ===
+  W — вперёд       S — назад
+  A — влево        D — вправо
+  Пробел — стоп
+  Q / Esc — выход
+"""
+
+
 class VescTeleop(Node):
     def __init__(self):
         super().__init__("vesc_teleop")
 
         p = self.declare_parameter
-        self.cmd_topic     = p("cmd_topic", "/vesc_can_node/cmd/duty").value
+        self.cmd_vel_topic = p("cmd_vel_topic", "/cmd_vel").value
         self.telemetry_ns  = p("telemetry_ns", "/vesc_can_node/telemetry").value
         self.publish_rate  = p("publish_rate", 20.0).value      # Гц, чтобы не сработал watchdog
-        self.start_max     = p("start_max_duty", 0.10).value
-        self.duty_step     = p("duty_step", 0.05).value         # шаг A/D
+        self.max_linear    = p("max_linear", 1.0).value         # нормированное значение linear.x
+        self.max_angular   = p("max_angular", 1.0).value        # нормированное значение angular.z
+        self.linear_step   = p("linear_step", 0.1).value        # шаг W/S
+        self.angular_step  = p("angular_step", 0.1).value       # шаг A/D
         # графики: вариативно и по умолчанию выключено
         self.enable_plot   = p("enable_plot", False).value
         self.plot_window   = p("plot_window", 30.0).value       # сек на экране
         self.plot_fps      = p("plot_fps", 5.0).value           # Гц обновления графика
 
-        self._pub = self.create_publisher(Float64, self.cmd_topic, 10)
+        self._pub = self.create_publisher(Twist, self.cmd_vel_topic, 10)
 
-        self._target = 0.0
-        self._max = float(self.start_max)
+        self._linear = 0.0
+        self._angular = 0.0
         self._alive = True
         self._fig = None
 
@@ -85,17 +90,21 @@ class VescTeleop(Node):
         self._key_thread = threading.Thread(target=self._key_loop, daemon=True)
         self._key_thread.start()
 
-        self.get_logger().info(f"Teleop -> {self.cmd_topic}")
+        self.get_logger().info(f"Teleop -> {self.cmd_vel_topic}")
         print(HELP)
 
     # ── публикация ──
     def _republish(self):
-        self._pub.publish(Float64(data=float(self._target)))
+        msg = Twist()
+        msg.linear.x = float(self._linear)
+        msg.angular.z = float(self._angular)
+        self._pub.publish(msg)
 
     def publish_stop(self):
-        self._target = 0.0
+        self._linear = 0.0
+        self._angular = 0.0
         try:
-            self._pub.publish(Float64(data=0.0))
+            self._pub.publish(Twist())
         except Exception:
             pass
 
@@ -125,22 +134,28 @@ class VescTeleop(Node):
         finally:
             if old is not None:
                 termios.tcsetattr(self._tty, termios.TCSADRAIN, old)
+            if self._tty is not sys.stdin:
+                self._tty.close()
 
     def _handle_key(self, ch):
         k = ch.lower()
-        if   k == "w": self._target = self._max
-        elif k == "s": self._target = -self._max
-        elif k == "a": self._max = max(0.0, round(self._max - self.duty_step, 3))
-        elif k == "d": self._max = min(1.0, round(self._max + self.duty_step, 3))
-        elif ch == " ": self._target = 0.0
+        if k == "w":
+            self._linear = min(self.max_linear, round(self._linear + self.linear_step, 3))
+        elif k == "s":
+            self._linear = max(-self.max_linear, round(self._linear - self.linear_step, 3))
+        elif k == "a":
+            self._angular = min(self.max_angular, round(self._angular + self.angular_step, 3))
+        elif k == "d":
+            self._angular = max(-self.max_angular, round(self._angular - self.angular_step, 3))
+        elif ch == " ":
+            self._linear = 0.0
+            self._angular = 0.0
         elif k == "q" or ch == "\x1b":
             self._quit(); return
         else:
             return
-        # если шла команда, обновим её под новый max
-        if self._target > 0:   self._target = self._max
-        elif self._target < 0: self._target = -self._max
-        print(f"\rduty {self._target:+.2f}  (макс {self._max:.2f})    ", end="", flush=True)
+        print(f"\rlinear.x {self._linear:+.2f}  angular.z {self._angular:+.2f}    ",
+              end="", flush=True)
 
     def _quit(self):
         print("\nВыход, стоп мотора.")

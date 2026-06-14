@@ -25,6 +25,7 @@ ROS 2 нода управления мотором VESC через Waveshare USB
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64
+from geometry_msgs.msg import Twist
 
 from vesc_can_driver.waveshare_can import WaveshareUsbCanA, Vesc
 
@@ -44,6 +45,7 @@ class VescCanNode(Node):
         self.duty_ramp_rate = p("duty_ramp_rate", 0.30).value
         self.telemetry_rate = p("telemetry_rate", 20.0).value
         self.cmd_timeout    = p("cmd_timeout", 0.5).value   # сек; 0 = выкл
+        self.cmd_vel_scale = p("cmd_vel_scale", 1.0).value
 
         # ── драйвер ──
         self.get_logger().info(
@@ -65,7 +67,7 @@ class VescCanNode(Node):
         self.create_subscription(Float64, "~/cmd/current", self._on_current, 10)
         self.create_subscription(Float64, "~/cmd/erpm",    self._on_erpm,    10)
         self.create_subscription(Float64, "~/cmd/brake",   self._on_brake,   10)
-
+        self.create_subscription(Twist, "/cmd_vel", self._on_cmd_vel, 10)
         # ── публикации телеметрии ──
         self._pubs = {
             name: self.create_publisher(Float64, f"~/telemetry/{name}", 10)
@@ -101,7 +103,9 @@ class VescCanNode(Node):
 
     def _on_brake(self, msg):
         self.vesc.set_current_brake(msg.data); self._touch()
-
+    def _on_cmd_vel(self, msg: Twist):
+        duty = max(-1.0, min(1.0, msg.linear.x * self.cmd_vel_scale))
+        self.vesc.set_duty(duty); self._touch()
     # ── watchdog ──
     def _watchdog(self):
         dt = (self.get_clock().now() - self._last_cmd).nanoseconds * 1e-9
