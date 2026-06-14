@@ -1,0 +1,3 @@
+[console_scripts]
+vesc_can_node = vesc_can_driver.vesc_can_node:main
+vesc_teleop_node = vesc_can_driver.vesc_teleop_node:main

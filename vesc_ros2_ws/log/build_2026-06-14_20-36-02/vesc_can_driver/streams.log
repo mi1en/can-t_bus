@@ -1,0 +1,49 @@
+[1.286s] Invoking command in '/home/mi1ena/Downloads/vesc_ros2_ws/src/vesc_can_driver': CONDA_PROMPT_MODIFIER=(base) DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/vesc_can_driver build --build-base /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build install --record /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/install.log --single-version-externally-managed install_data
+[1.670s] running egg_info
+[1.670s] creating ../../build/vesc_can_driver/vesc_can_driver.egg-info
+[1.703s] writing ../../build/vesc_can_driver/vesc_can_driver.egg-info/PKG-INFO
+[1.703s] writing dependency_links to ../../build/vesc_can_driver/vesc_can_driver.egg-info/dependency_links.txt
+[1.703s] writing entry points to ../../build/vesc_can_driver/vesc_can_driver.egg-info/entry_points.txt
+[1.703s] writing requirements to ../../build/vesc_can_driver/vesc_can_driver.egg-info/requires.txt
+[1.703s] writing top-level names to ../../build/vesc_can_driver/vesc_can_driver.egg-info/top_level.txt
+[1.704s] writing manifest file '../../build/vesc_can_driver/vesc_can_driver.egg-info/SOURCES.txt'
+[1.747s] reading manifest file '../../build/vesc_can_driver/vesc_can_driver.egg-info/SOURCES.txt'
+[1.748s] writing manifest file '../../build/vesc_can_driver/vesc_can_driver.egg-info/SOURCES.txt'
+[1.748s] running build
+[1.748s] running build_py
+[1.748s] creating /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build
+[1.748s] creating /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib
+[1.748s] creating /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver
+[1.748s] copying vesc_can_driver/__init__.py -> /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver
+[1.748s] copying vesc_can_driver/vesc_can_node.py -> /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver
+[1.748s] copying vesc_can_driver/waveshare_can.py -> /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver
+[1.748s] copying vesc_can_driver/vesc_teleop_node.py -> /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver
+[1.749s] running install
+[1.753s] running install_lib
+[1.771s] creating /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver
+[1.772s] copying /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver/__init__.py -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver
+[1.772s] copying /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver/vesc_can_node.py -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver
+[1.772s] copying /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver/waveshare_can.py -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver
+[1.772s] copying /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build/lib/vesc_can_driver/vesc_teleop_node.py -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver
+[1.772s] byte-compiling /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver/__init__.py to __init__.cpython-312.pyc
+[1.772s] byte-compiling /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver/vesc_can_node.py to vesc_can_node.cpython-312.pyc
+[1.773s] byte-compiling /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver/waveshare_can.py to waveshare_can.cpython-312.pyc
+[1.774s] byte-compiling /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver/vesc_teleop_node.py to vesc_teleop_node.cpython-312.pyc
+[1.775s] running install_data
+[1.775s] creating /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/ament_index
+[1.775s] creating /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/ament_index/resource_index
+[1.776s] creating /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/ament_index/resource_index/packages
+[1.776s] copying resource/vesc_can_driver -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/ament_index/resource_index/packages
+[1.776s] copying package.xml -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/vesc_can_driver
+[1.776s] creating /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/vesc_can_driver/launch
+[1.776s] copying launch/vesc.launch.py -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/vesc_can_driver/launch
+[1.776s] copying launch/teleop.launch.py -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/vesc_can_driver/launch
+[1.776s] creating /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/vesc_can_driver/config
+[1.776s] copying config/vesc_params.yaml -> /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/share/vesc_can_driver/config
+[1.776s] running install_egg_info
+[1.795s] Copying ../../build/vesc_can_driver/vesc_can_driver.egg-info to /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages/vesc_can_driver-0.1.0-py3.12.egg-info
+[1.795s] running install_scripts
+[1.898s] Installing vesc_can_node script to /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/vesc_can_driver
+[1.898s] Installing vesc_teleop_node script to /home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/vesc_can_driver
+[1.898s] writing list of installed files to '/home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/install.log'
+[1.919s] Invoked command in '/home/mi1ena/Downloads/vesc_ros2_ws/src/vesc_can_driver' returned '0': CONDA_PROMPT_MODIFIER=(base) DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/mi1ena/Downloads/vesc_ros2_ws/install/vesc_can_driver/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/vesc_can_driver build --build-base /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/build install --record /home/mi1ena/Downloads/vesc_ros2_ws/build/vesc_can_driver/install.log --single-version-externally-managed install_data

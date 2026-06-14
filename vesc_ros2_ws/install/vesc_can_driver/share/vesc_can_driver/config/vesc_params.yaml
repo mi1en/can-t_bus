@@ -1,0 +1,13 @@
+# Параметры ноды управления VESC.
+# Подставь свой порт: Linux обычно /dev/ttyUSB0, Windows — COM10.
+vesc_can_node:
+  ros__parameters:
+    serial_port: "/dev/ttyUSB0"   # Windows: "COM10"
+    serial_baud: 2000000          # скорость USB<->адаптер
+    can_bitrate: 500000           # скорость CAN-шины
+    vesc_id: 1                    # VESC ID из VESC Tool
+    pole_pairs: 7                 # пар полюсов мотора (6374 обычно 7)
+    send_period: 0.05             # период повтора команды, сек (< таймаута VESC 1000 мс)
+    duty_ramp_rate: 0.30          # плавность duty: единиц/сек (меньше = мягче)
+    telemetry_rate: 20.0          # частота публикации телеметрии, Гц
+    cmd_timeout: 0.5              # сек без команд -> стоп (0 = выключить watchdog)

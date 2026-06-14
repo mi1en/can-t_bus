@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: vesc-can-driver
+Version: 0.1.0
+Summary: VESC motor control over CAN via Waveshare USB-CAN-A (ROS 2).
+Maintainer: plesh
+Maintainer-email: pleshevichmilena186@gmail.com
+License: MIT
