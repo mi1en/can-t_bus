@@ -29,7 +29,7 @@ def generate_launch_description():
     )
     teleop = Node(
         package="vesc_can_driver", executable="vesc_teleop_node", name="vesc_teleop",
-        output="screen", emulate_tty=True, prefix="xterm -e",
+        output="screen", emulate_tty=True,
         parameters=[{"enable_plot": LaunchConfiguration("enable_plot")}],
     )
 

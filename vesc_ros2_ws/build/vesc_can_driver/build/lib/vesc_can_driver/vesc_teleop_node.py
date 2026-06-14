@@ -44,6 +44,12 @@ HELP = """
   Q / Esc — выход
 """
 
+def _open_tty():
+    """Открыть /dev/tty, чтобы читать клавиши даже если stdin перенаправлен."""
+    try:
+        return open("/dev/tty", "r")
+    except Exception:
+        return sys.stdin
 
 class VescTeleop(Node):
     def __init__(self):
@@ -96,8 +102,8 @@ class VescTeleop(Node):
     # ── клавиатура ──
     def _getch(self):
         if _POSIX:
-            r, _, _ = select.select([sys.stdin], [], [], 0.1)
-            return sys.stdin.read(1) if r else None
+            r, _, _ = select.select([self._tty], [], [], 0.1)
+            return self._tty.read(1) if r else None
         else:
             if msvcrt.kbhit():
                 return msvcrt.getch().decode(errors="ignore")
@@ -105,10 +111,11 @@ class VescTeleop(Node):
             return None
 
     def _key_loop(self):
+        self._tty = _open_tty()
         old = None
-        if _POSIX and sys.stdin.isatty():
-            old = termios.tcgetattr(sys.stdin)
-            tty.setcbreak(sys.stdin.fileno())
+        if _POSIX and self._tty.isatty():
+            old = termios.tcgetattr(self._tty)
+            tty.setcbreak(self._tty.fileno())
         try:
             while self._alive:
                 ch = self._getch()
@@ -117,7 +124,7 @@ class VescTeleop(Node):
                 self._handle_key(ch)
         finally:
             if old is not None:
-                termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old)
+                termios.tcsetattr(self._tty, termios.TCSADRAIN, old)
 
     def _handle_key(self, ch):
         k = ch.lower()
